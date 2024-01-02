@@ -10,54 +10,50 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Connect to database
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    // MySQL username,
-    user: 'root',
-    // TODO: Add MySQL password here
-    password: 'IlikeSQL',
-    database: 'company_db'
-  },
-  console.log(`Connected to the company_db database.`)
-);
 
 // Read SQL files
 const querySql = fs.readFileSync(path.join(__dirname, 'db', 'query.sql'), 'utf8');
 const schemaSql = fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8');
 const seedsSql = fs.readFileSync(path.join(__dirname, 'db', 'seeds.sql'), 'utf8');
 
-// Execute SQL queries
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
+// Connect to database
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'IlikeSQL',
+});
 
 
-// Execute your SQL queries
-connection.query(schemaSql, (err, results) => {
+// Execute CREATE DATABASE IF NOT EXISTS statement
+db.query('CREATE DATABASE IF NOT EXISTS company_db', (err, results) => {
   if (err) throw err;
-  console.log('Schema SQL executed successfully:', results);
 
-  // Execute other SQL queries as needed
-  // connection.query(querySql, (err, results) => {
-  //   if (err) throw err;
-  //   console.log('Query SQL executed successfully:', results);
-  // });
+  console.log('Database created or exists:', results);
 
-  // connection.query(seedsSql, (err, results) => {
-  //   if (err) throw err;
-  //   console.log('Seeds SQL executed successfully:', results);
-  // });
+  // Switch to 'company_db' database
+  db.query('USE company_db', (err, results) => {
+    if (err) throw err;
 
-  // Close the database connection
-  connection.end((err) => {
-    if (err) console.error('Error closing the database connection:', err);
-    console.log('Database connection closed.');
+    console.log('Using database: company_db', results);
+
+    // Execute the rest of the schema SQL queries
+    db.query(schemaSql, (err, results) => {
+      if (err) throw err;
+      console.log('Schema SQL executed successfully:', results);
+
+      // Close the database connection
+      db.end((err) => {
+        if (err) console.error('Error closing the database connection:', err);
+        console.log('Database connection closed.');
+      });
+    });
   });
 });
+
+
+// Start the Express server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // // Create a movie

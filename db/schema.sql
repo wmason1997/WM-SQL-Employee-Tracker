@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS company_db;
-CREATE DATABASE company_db;
-
+-- Use or create the 'company_db' database
+CREATE DATABASE IF NOT EXISTS company_db;
 USE company_db;
 
+-- Create tables according to the instructions of project
 CREATE TABLE department (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
@@ -31,3 +31,6 @@ CREATE TABLE employee (
     REFERENCES employee(id)
     ON DELETE SET NULL
 );
+
+GRANT ALL PRIVILEGES ON company_db.* TO 'root'@'localhost';
+FLUSH PRIVILEGES;
