@@ -1,5 +1,6 @@
 const express = require('express');
-// Import and require mysql2
+const fs = require('fs');
+const path = require('path');
 const mysql = require('mysql2');
 
 const PORT = process.env.PORT || 3001;
@@ -21,6 +22,43 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the company_db database.`)
 );
+
+// Read SQL files
+const querySql = fs.readFileSync(path.join(__dirname, 'db', 'query.sql'), 'utf8');
+const schemaSql = fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8');
+const seedsSql = fs.readFileSync(path.join(__dirname, 'db', 'seeds.sql'), 'utf8');
+
+// Execute SQL queries
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+
+
+// Execute your SQL queries
+connection.query(schemaSql, (err, results) => {
+  if (err) throw err;
+  console.log('Schema SQL executed successfully:', results);
+
+  // Execute other SQL queries as needed
+  // connection.query(querySql, (err, results) => {
+  //   if (err) throw err;
+  //   console.log('Query SQL executed successfully:', results);
+  // });
+
+  // connection.query(seedsSql, (err, results) => {
+  //   if (err) throw err;
+  //   console.log('Seeds SQL executed successfully:', results);
+  // });
+
+  // Close the database connection
+  connection.end((err) => {
+    if (err) console.error('Error closing the database connection:', err);
+    console.log('Database connection closed.');
+  });
+});
+});
 
 // // Create a movie
 // app.post('/api/new-movie', ({ body }, res) => {
