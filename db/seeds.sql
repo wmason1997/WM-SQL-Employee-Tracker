@@ -1,11 +1,11 @@
--- Seeding the department table
+-- Seeding the department table -- 
 INSERT INTO department (name)
 VALUES ("HR"),
        ("Product Mangement"),
        ("Software Engineering"),
        ("Sales");
 
--- Seeding the role table
+-- Seeding the role table -- 
 INSERT INTO role (department_id, title, salary)
 VALUES (1, "Compensation Analyst", 120000),
        (1, "Benefits Administrator", 55000),
@@ -21,7 +21,7 @@ VALUES (1, "Compensation Analyst", 120000),
        (4, "Junior Seller", 70000);
 
 
--- Seeding the employee table
+-- Seeding the employee table -- 
 INSERT INTO employee (role_id, first_name, last_name)
 VALUES (1, "Sydney", "Parks"),
        (2, "John", "Tortellini"),

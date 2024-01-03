@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 });
 
 function viewAllEmployees() {
-  return fs.readFile(path.join(__dirname, 'db', 'seeds.sql'), 'utf8')
+  return fs.readFile(path.join(__dirname, 'db', 'query.sql'), 'utf8')
     .then((querySql) => {
       return connection.promise().query(querySql); // Use promise().query for promises
     });
