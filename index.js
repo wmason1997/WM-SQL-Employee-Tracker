@@ -55,6 +55,9 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
+    // "Add Department" case
+    // case "Add Department":
+
     
     // Handle other prompt choices here
 
