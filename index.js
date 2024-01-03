@@ -11,10 +11,24 @@ const connection = mysql.createConnection({
 });
 
 function viewAllEmployees() {
-  return fs.readFile(path.join(__dirname, 'db', 'query.sql'), 'utf8')
+  return fs.readFile(path.join(__dirname, 'db', 'viewAllEmployees.sql'), 'utf8')
     .then((querySql) => {
       return connection.promise().query(querySql); // Use promise().query for promises
     });
+}
+
+function viewAllDepartments() {
+  return fs.readFile(path.join(__dirname, 'db', 'viewAllDepartments.sql'), 'utf8')
+  .then((querySql) => {
+    return connection.promise().query(querySql); // Use promise().query for promises
+  });
+}
+
+function viewAllRoles() {
+  return fs.readFile(path.join(__dirname, 'db', 'viewAllRoles.sql'), 'utf8')
+  .then((querySql) => {
+    return connection.promise().query(querySql); // Use promise().query for promises
+  });
 }
 
 function handlePromptChoice(promptChoice) {
@@ -25,6 +39,23 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
+
+    // "View All Roles" case
+    case "View All Roles":
+      return viewAllRoles().then((results) => {
+        console.log('All Roles:');
+        console.table(results[0]);
+      });
+
+
+    // "View All Departments" case 
+    case "View All Departments":
+      return viewAllDepartments().then((results) => {
+        console.log('All Departments:');
+        console.table(results[0]);
+      });
+
+    
     // Handle other prompt choices here
 
     default:

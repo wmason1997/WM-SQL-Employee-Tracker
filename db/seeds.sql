@@ -1,7 +1,7 @@
 -- Seeding the department table -- 
 INSERT INTO department (name)
 VALUES ("HR"),
-       ("Product Mangement"),
+       ("Product Management"),
        ("Software Engineering"),
        ("Sales");
 
@@ -11,7 +11,7 @@ VALUES (1, "Compensation Analyst", 120000),
        (1, "Benefits Administrator", 55000),
        (1, "Recruiter", 92000), 
        (2, "PM I", 110000),
-       (2, "PM 2", 150000),
+       (2, "PM II", 150000),
        (2, "Senior PM", 210000),
        (3, "SWE I", 160000),
        (3, "SWE II", 191000),
