@@ -97,8 +97,8 @@ async function addEmployee() {
   ]).then(async answers => { 
     await connection.promise().query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answers.firstName}", "${answers.lastName}", ${answers.employeeRole}, ${answers.employeeManager})`);
     return viewAllEmployees();
-    })
-};
+  });
+}
 
 async function updateEmployeeRole() {
   const [employees] = await connection.promise().query('SELECT * FROM employee');
@@ -176,6 +176,11 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
+    // "Quit" case
+    case "Quit":
+      connection.end();
+      process.exit();
+
     // Handle other prompt choices here (EC attempts)
 
     default:
@@ -197,13 +202,14 @@ function loadPrompts() {
         "Add Role",
         "View All Departments",
         "Add Department",
+        "Quit",
       ],
     },
   ]).then((answers) => {
     const { promptChoice } = answers;
     handlePromptChoice(promptChoice).then(() => {
-      connection.end(); // Close the MySQL connection
-      process.exit(); // Exit the Node.js process
+      //connection.end(); // Close the MySQL connection // Commented this out since we only want it to end when quit is selected.
+      loadPrompts(); // Exit the Node.js process
     });
   }).catch((error) => {
     console.error("Error during prompt:", error);
