@@ -100,6 +100,28 @@ async function addEmployee() {
     })
 };
 
+async function updateEmployeeRole() {
+  const [employees] = await connection.promise().query('SELECT * FROM employee');
+  const [roles] = await connection.promise().query('SELECT * FROM role');
+  return prompt([
+    {
+      type: "list",
+      name: "employeeToUpdateRole",
+      choices: employees.map(({id, first_name, last_name}) => ({value: id, name: `${first_name} ${last_name}`})),
+      message: "Which employee's role do you want to update?",
+    },
+    {
+      type: "list",
+      name: "employeeNewRole",
+      choices: roles.map(({id, title}) => ({value: id, name: title})),
+      message: "Which role do you want to assign the selected employee?",
+    }
+  ]).then(async answers => {
+    await connection.promise().query(`UPDATE employee SET role_id = ${answers.employeeNewRole} WHERE id = ${answers.employeeToUpdateRole}`); // update query instruction
+    return viewAllEmployees();
+  })
+};
+
 function handlePromptChoice(promptChoice) {
   switch (promptChoice) {
     case "View All Employees":
@@ -146,7 +168,15 @@ function handlePromptChoice(promptChoice) {
         console.log('All Employees:');
         console.table(results[0]);
       });
-    // Handle other prompt choices here
+
+    // "Update Employee Role" case
+    case "Update Employee Role":
+      return updateEmployeeRole().then((results) => {
+        console.log('All Employees:');
+        console.table(results[0]);
+      });
+
+    // Handle other prompt choices here (EC attempts)
 
     default:
       console.log("Invalid choice");
