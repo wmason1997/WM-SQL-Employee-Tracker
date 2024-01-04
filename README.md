@@ -1,12 +1,11 @@
 # WM-SQL-Employee-Tracker
 
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## Table of Contents
 * [Description](#description)
+* [Video Example Walkthrough](#video-example-walkthrough)
 * [Installation](#installation-instructions)
 * [Usage](#usage-instructions)
-* [License](#license)
+* [Credits](#credits)
 * [Contributing](#contribution-guidelines)
 * [Tests](#tests)
 * [Questions](#questions)
@@ -14,15 +13,19 @@
 ## Description <a name="description"></a> 
 I have created a command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
+## Video Example Walkthrough <a name="video-example-walkthrough"></a>
+Here is a link to the video example walkthrough hosted on Google Drive: [](). I showed the interaction with the command line interface (CLI) by entering "node index.js"
+
 ## Installation <a name="installation-instructions"></a>
 Clone this repository, install Inquirer@8.2.4, MySQL2, and run node index.js in the terminal.
 
 ## Usage <a name="usage-instructions"></a>
 Run node index.js in the terminal.
 
-## License <a name="license"></a>
-  This project's license is MIT License.<br>  
-  The website for this license is [https://opensource.org/license/mit/](https://opensource.org/license/mit/).
+## Credits <a name="credits"></a>
+I used the Stu_Mini-Project from Module 12-SQL of the [UCSD-VIRT-FSF-PT-09-2023-U-LOLC](https://git.bootcampcontent.com/University-of-California---San-Diego/UCSD-VIRT-FSF-PT-09-2023-U-LOLC) GitLab repository as an example. Thank you, user mvpache!
+
+I had a tutoring session with Mila Hose on 01/03/2023. Mila helped me with...
   
 
 ## Contributing <a name="contribution-guidelines"></a>
