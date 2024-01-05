@@ -122,12 +122,28 @@ async function updateEmployeeRole() {
   })
 };
 
+async function deleteDepartment() {
+  const [departments] = await connection.promise().query('SELECT * from department');
+  return prompt([
+    {
+      type: "list",
+      name: "departmentToDelete",
+      choices: departments.map(({id, name}) => ({value: id, name: name})),
+      message: "Which department do you want to delete?",
+    }
+  ]).then(async answers => {
+    await connection.promise().query(`DELETE FROM department WHERE id = ${answers.departmentToDelete}`);
+    return viewAllDepartments();
+  })
+};
+
 function handlePromptChoice(promptChoice) {
   switch (promptChoice) {
     case "View All Employees":
       return viewAllEmployees().then((results) => {
         console.log('All Employees:');
         console.table(results[0]);
+
       });
 
 
@@ -150,14 +166,18 @@ function handlePromptChoice(promptChoice) {
     // case "Add Department":
     case "Add Department":
       return addDepartment().then((results) => {
+        //console.log(`Added ${departmentName} to the database.`);
+        console.log('Added department to the database');
         console.log('All Departments:');
         console.table(results[0]);
+        // console.log(`A`)
       });
 
     // "Add Role" case
     // case "Add Role":
     case "Add Role":
       return addRole().then((results) => {
+        console.log('Added role to the database.');
         console.log('All Roles:');
         console.table(results[0]);
       });
@@ -165,6 +185,7 @@ function handlePromptChoice(promptChoice) {
     // "Add Employee" case
     case "Add Employee":
       return addEmployee().then((results) => {
+        console.log('Added employee to the database.');
         console.log('All Employees:');
         console.table(results[0]);
       });
@@ -172,9 +193,24 @@ function handlePromptChoice(promptChoice) {
     // "Update Employee Role" case
     case "Update Employee Role":
       return updateEmployeeRole().then((results) => {
+        console.log("Updated employee's role");
         console.log('All Employees:');
         console.table(results[0]);
       });
+
+    // "Delete a Department" case
+    case "Delete a Department":
+      return deleteDepartment().then((results) => {
+        console.log("Deleted department.");
+        console.log('All Departments:');
+        console.table(results[0]);
+      });
+
+
+    // "Delete a Role" case
+
+
+    // "Delete an Employee" case
 
     // "Quit" case
     case "Quit":
@@ -202,6 +238,9 @@ function loadPrompts() {
         "Add Role",
         "View All Departments",
         "Add Department",
+        "Delete a Department",
+        //"Delete a Role",
+        //"Delete an Employee",
         "Quit",
       ],
     },
