@@ -122,6 +122,29 @@ async function updateEmployeeRole() {
   })
 };
 
+// Was not able to get this EC working yet.
+// async function updateEmployeeManager() {
+//   const [employees] = await connection.promise().query('SELECT * FROM employee');
+//   const [managers] = await connection.promise().query('SELECT DISTINCT manager_id FROM employee');
+//   return prompt([
+//     {
+//       type: "list",
+//       name: "employeeToUpdateManager",
+//       choices: employees.map(({id, first_name, last_name}) => ({value: id, name: `${first_name} ${last_name}`})),
+//       message: "For which employee do you want to update their manager?",
+//     },
+//     {
+//       type: "list",
+//       name: "newManager",
+//       choices: managers.map(({manager_id, first_name, last_name}) => ({value: manager_id, name: `${first_name} ${last_name}`})),
+//       message: "Who will be their new manager?",
+//     }
+//   ]).then(async answers => {
+//     await connection.promise().query(`UPDATE employee SET manager_id = ${answers.newManager} WHERE id = ${answers.employeeToUpdateManager}`);
+//     return viewAllEmployees();
+//   });
+// };
+
 async function deleteDepartment() {
   const [departments] = await connection.promise().query('SELECT * from department');
   return prompt([
@@ -167,6 +190,7 @@ async function deleteEmployee() {
   })
 };
 
+// Was not able to get this EC working yet either.
 // async function viewEmployeesByManager() {
 //   const [managers] = await connection.promise().query('SELECT DISTINCT manager_id, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name FROM employee');
 // };
@@ -259,6 +283,14 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
+    // "Update Employee Manager" case
+    // case "Update Employee Manager":
+    //   return updateEmployeeManager().then((results) => {
+    //     console.log('Manager updated');
+    //     console.log('All Employees:');
+    //     console.table(results[0]);
+    //   });
+
     // "Delete a Department" case
     case "Delete a Department":
       return deleteDepartment().then((results) => {
@@ -284,10 +316,10 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
-    // "View Employees by Manager"
-    case "View Employees by Manager":
-      return viewEmployeesByManager().then((results) => {
-      });
+    // // "View Employees by Manager"
+    // case "View Employees by Manager":
+    //   return viewEmployeesByManager().then((results) => {
+    //   });
 
     // "View Employees by Department"
     case "View Employees by Department":
