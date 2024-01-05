@@ -137,6 +137,36 @@ async function deleteDepartment() {
   })
 };
 
+async function deleteRole() {
+  const [roles] = await connection.promise().query('SELECT * FROM role');
+  return prompt([
+    {
+      type: "list",
+      name: "roleToDelete",
+      choices: roles.map(({id, title}) => ({value: id, name: title})),
+      message: "Which role do you want to delete?",
+    }
+  ]).then(async answers => {
+    await connection.promise().query(`DELETE FROM role WHERE id = ${answers.roleToDelete}`);
+    return viewAllRoles();
+  })
+};
+
+async function deleteEmployee() {
+  const [employees] = await connection.promise().query('SELECT * FROM employee');
+  return prompt([
+    {
+      type: "list",
+      name: "employeeToDelete",
+      choices: employees.map(({id, first_name, last_name}) => ({value: id, name: `${first_name} ${last_name}`})),
+      message: "Which employee do you want to delete?",
+    }
+  ]).then(async answers => {
+    await connection.promise().query(`DELETE FROM employee WHERE id = ${answers.employeeToDelete}`);
+    return viewAllEmployees();
+  })
+};
+
 function handlePromptChoice(promptChoice) {
   switch (promptChoice) {
     case "View All Employees":
@@ -208,9 +238,20 @@ function handlePromptChoice(promptChoice) {
 
 
     // "Delete a Role" case
-
+    case "Delete a Role":
+      return deleteRole().then((results) => {
+        console.log("Deleted role.");
+        console.log('All Roles:');
+        console.table(results[0]);
+      });
 
     // "Delete an Employee" case
+    case "Delete an Employee":
+      return deleteEmployee().then((results) => {
+        console.log("Deleted employee.");
+        console.log('All Employees:');
+        console.table(results[0]);
+      });
 
     // "Quit" case
     case "Quit":
@@ -239,8 +280,8 @@ function loadPrompts() {
         "View All Departments",
         "Add Department",
         "Delete a Department",
-        //"Delete a Role",
-        //"Delete an Employee",
+        "Delete a Role",
+        "Delete an Employee",
         "Quit",
       ],
     },
