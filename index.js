@@ -167,8 +167,39 @@ async function deleteEmployee() {
   })
 };
 
+// async function viewEmployeesByManager() {
+//   const [managers] = await connection.promise().query('SELECT DISTINCT manager_id, CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name FROM employee');
+// };
+
+async function viewEmployeesByDepartment() {
+  const [departments] = await connection.promise().query('SELECT * from department');
+  return prompt([
+    {
+      type: "list",
+      name: "departmentToViewEmployeesBy",
+      choices: departments.map(({id, name}) => ({value: id, name: name})),
+      message: "Which department do you want to view employees by?",
+    }
+  ]).then(async answers => {
+    const departmentId = answers.departmentToViewEmployeesBy;
+
+    const query = `
+      SELECT employee.id, employee.first_name, employee.last_name, role.title as role, role.salary, department.name as department
+      FROM employee
+      JOIN role ON employee.role_id = role.id
+      JOIN department on role.department_id = department.id
+      WHERE department.id = ?;
+    `;
+
+    const [employees] = await connection.promise().query(query, [departmentId]);
+    console.log(`Employees in the selected department (${answers.departmentToViewEmployeesBy}):`);
+    console.table(employees);
+  });
+};
+
 function handlePromptChoice(promptChoice) {
   switch (promptChoice) {
+    // "View All Employees"
     case "View All Employees":
       return viewAllEmployees().then((results) => {
         console.log('All Employees:');
@@ -253,12 +284,20 @@ function handlePromptChoice(promptChoice) {
         console.table(results[0]);
       });
 
+    // "View Employees by Manager"
+    case "View Employees by Manager":
+      return viewEmployeesByManager().then((results) => {
+      });
+
+    // "View Employees by Department"
+    case "View Employees by Department":
+      return viewEmployeesByDepartment().then((results) => {
+      });
+
     // "Quit" case
     case "Quit":
       connection.end();
       process.exit();
-
-    // Handle other prompt choices here (EC attempts)
 
     default:
       console.log("Invalid choice");
@@ -282,6 +321,10 @@ function loadPrompts() {
         "Delete a Department",
         "Delete a Role",
         "Delete an Employee",
+        //"View Employees by Manager",
+        "View Employees by Department",
+        //"Update Employee Manager",
+        //"View Total Utilized Budget of a Department",
         "Quit",
       ],
     },
